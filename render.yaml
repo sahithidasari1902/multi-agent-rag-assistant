@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: multi-agent-rag-assistant
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: CHROMA_PERSIST_DIR
+        value: ./data/chroma_store
+      - key: DOCS_DIR
+        value: ./data/documents
+    healthCheckPath: /health

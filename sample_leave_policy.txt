@@ -1,0 +1,14 @@
+Company Leave Policy (Sample Document for Testing)
+
+Employees are entitled to 18 days of paid annual leave per calendar year,
+accrued monthly. Sick leave is separate and capped at 10 days per year,
+with a doctor's note required for absences longer than 2 consecutive days.
+
+Unused annual leave may be carried forward into the next year up to a
+maximum of 5 days; any leave beyond that is forfeited on December 31st.
+
+Employees must submit leave requests through the HR portal at least
+3 working days in advance, except in documented emergencies.
+
+Maternity leave is 26 weeks paid, and paternity leave is 2 weeks paid,
+both requiring at least 30 days advance notice where possible.
