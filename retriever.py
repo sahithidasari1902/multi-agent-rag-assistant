@@ -1,13 +1,21 @@
+"""
+Loads the persisted Chroma vector store and exposes a simple retrieval
+function used by the retriever agent node in the LangGraph.
+
+Uses a local, custom FastEmbed wrapper (see embeddings.py) — free, no API
+key, no cost, and avoids a known bug in langchain_community's own
+FastEmbedEmbeddings wrapper.
+"""
 import os
 from dotenv import load_dotenv
-from langchain_community.embeddings import FastEmbedEmbeddings
+from embeddings import LocalFastEmbedEmbeddings
 from langchain_community.vectorstores import Chroma
 
 load_dotenv()
 
 PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_store")
 
-_embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+_embeddings = LocalFastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 _vectordb = None
 
 
