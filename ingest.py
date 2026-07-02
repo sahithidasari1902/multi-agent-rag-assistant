@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_community.vectorstores import Chroma
 
 load_dotenv()
@@ -19,7 +19,6 @@ PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_store")
 
 
 def load_documents(docs_dir: str):
-    """Load every PDF and .txt file in docs_dir into LangChain Document objects."""
     documents = []
     for filename in os.listdir(docs_dir):
         path = os.path.join(docs_dir, filename)
@@ -42,7 +41,7 @@ def build_vector_store():
     chunks = splitter.split_documents(documents)
     print(f"Loaded {len(documents)} document(s), split into {len(chunks)} chunks.")
 
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
+    embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
 
     vectordb = Chroma.from_documents(
         documents=chunks,
