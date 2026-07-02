@@ -1,15 +1,18 @@
 """
-FastAPI layer exposing the multi-agent RAG system as a REST API.
+FastAPI layer exposing the multi-agent RAG system as a REST API,
+plus a simple chat UI served at the root URL.
 
 Run locally:
     uvicorn main:app --reload
 
 Endpoints:
-    POST /ask      -> ask the agent a question
-    GET  /health   -> health check
+    GET  /        -> simple chat UI (index.html)
+    POST /ask     -> ask the agent a question
+    GET  /health  -> health check
 """
 import os
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from graph import run_agent
@@ -48,6 +51,12 @@ class AskResponse(BaseModel):
     route_taken: str
     used_retrieval: bool
     answer: str
+
+
+@app.get("/")
+def serve_ui():
+    """Serves the simple chat UI so the live link isn't just raw API docs."""
+    return FileResponse("index.html")
 
 
 @app.get("/health")
