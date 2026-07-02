@@ -1,15 +1,12 @@
 """
 Ingestion pipeline: reads PDFs/text files from DOCS_DIR, splits them into
 chunks, embeds them, and stores them in a persistent Chroma vector database.
-
-Run this once (or whenever you add new documents):
-    python ingest.py
 """
 import os
 from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import FastEmbedEmbeddings
+from embeddings import LocalFastEmbedEmbeddings
 from langchain_community.vectorstores import Chroma
 
 load_dotenv()
@@ -32,22 +29,14 @@ def load_documents(docs_dir: str):
 def build_vector_store():
     os.makedirs(DOCS_DIR, exist_ok=True)
     documents = load_documents(DOCS_DIR)
-
     if not documents:
         print(f"No documents found in {DOCS_DIR}. Add a PDF or .txt file and re-run.")
         return
-
     splitter = RecursiveCharacterTextSplitter(chunk_size=800, chunk_overlap=120)
     chunks = splitter.split_documents(documents)
     print(f"Loaded {len(documents)} document(s), split into {len(chunks)} chunks.")
-
-    embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
-
-    vectordb = Chroma.from_documents(
-        documents=chunks,
-        embedding=embeddings,
-        persist_directory=PERSIST_DIR,
-    )
+    embeddings = LocalFastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
+    vectordb = Chroma.from_documents(documents=chunks, embedding=embeddings, persist_directory=PERSIST_DIR)
     vectordb.persist()
     print(f"Vector store built and persisted at {PERSIST_DIR}")
 
